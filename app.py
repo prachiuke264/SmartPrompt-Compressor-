@@ -12,6 +12,9 @@ st.set_page_config(page_title="SmartPrompt Compressor 3D Fixed", layout="wide")
 # -------------------------------------------------------------
 # Inside this script we dynamically create the 3D particles 
 # without calling any blocked external cloud URLs!
+# -------------------------------------------------------------
+# HYPER-FUTURISTIC THREE.JS 3D PARTICLE CORE (SECURE IFRAME EMBED)
+# -------------------------------------------------------------
 three_js_html = """
 <!DOCTYPE html>
 <html>
@@ -22,17 +25,9 @@ three_js_html = """
     </style>
 </head>
 <body>
-    <div id="fallback-3d" style="color: #00f3ff; font-family: monospace; padding: 20px; text-align: center; font-size: 14px; letter-spacing: 1px;">
-        ⚙️ INITIALIZING LOCAL QUANTUM PARTICLES COMPRESSION GRID...
-    </div>
-    
+    <!-- Securely fetch Three.js inside an isolated sandbox window -->
+    <script src="https://cloudflare.com"></script>
     <script>
-    // Dynamically inject the raw Three.js compilation engine locally to bypass Colab block
-    var script = document.createElement('script');
-    script.src = 'https://cloudflare.com';
-    script.onload = function() {
-        document.getElementById('fallback-3d').style.display = 'none';
-        
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / 350, 1, 1000);
         camera.position.z = 50;
@@ -41,7 +36,7 @@ three_js_html = """
         renderer.setSize(window.innerWidth, 350);
         document.body.appendChild(renderer.domElement);
 
-        const particleCount = 600;
+        const particleCount = 700;
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(particleCount * 3);
         const originalPositions = [];
@@ -58,26 +53,26 @@ three_js_html = """
 
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         const pMaterial = new THREE.PointsMaterial({
-            color: 0x00f3ff, size: 1.8, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending
+            color: 0x00f3ff, size: 1.5, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending
         });
         const particleSystem = new THREE.Points(geometry, pMaterial);
         scene.add(particleSystem);
 
         let mouseX = 0, mouseY = 0;
         document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - window.innerWidth / 2) * 0.12;
-            mouseY = (event.clientY - 350 / 2) * 0.12;
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.15;
+            mouseY = (event.clientY - 350 / 2) * 0.15;
         });
 
         let clock = new THREE.Clock();
         function animate() {
             requestAnimationFrame(animate);
-            const time = clock.getElapsedTime() * 1.5;
+            const time = clock.getElapsedTime() * 2;
             const posArray = particleSystem.geometry.attributes.position.array;
             for (let i = 0; i < particleCount; i++) {
                 const orig = originalPositions[i];
-                posArray[i * 3] = orig.x + Math.sin(time + orig.y) * 1.5;
-                posArray[i * 3 + 1] = orig.y + Math.cos(time + orig.x) * 1.5;
+                posArray[i * 3] = orig.x + Math.sin(time + orig.y) * 2;
+                posArray[i * 3 + 1] = orig.y + Math.cos(time + orig.x) * 2;
             }
             particleSystem.geometry.attributes.position.needsUpdate = true;
             camera.position.x += (mouseX - camera.position.x) * 0.05;
@@ -86,12 +81,17 @@ three_js_html = """
             renderer.render(scene, camera);
         }
         animate();
-    };
-    document.head.appendChild(script);
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / 350;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, 350);
+        });
     </script>
 </body>
 </html>
 """
+
 
 # Premium Custom CSS Injection for Neumorphic Glass Cards
 st.markdown("""
