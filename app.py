@@ -1,97 +1,11 @@
+%%writefile app.py
 import streamlit as st
-import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import pickle
 
 # Set professional wide-screen dashboard layout
-st.set_page_config(page_title="SmartPrompt Compressor 3D Fixed", layout="wide")
-
-# -------------------------------------------------------------
-# LOCAL SECURITY BYPASS: STANDALONE 3D ENGINE INJECTION
-# -------------------------------------------------------------
-# Inside this script we dynamically create the 3D particles 
-# without calling any blocked external cloud URLs!
-# -------------------------------------------------------------
-# HYPER-FUTURISTIC THREE.JS 3D PARTICLE CORE (SECURE IFRAME EMBED)
-# -------------------------------------------------------------
-three_js_html = """
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body { margin: 0; background-color: #0E1117; overflow: hidden; }
-        canvas { width: 100vw; height: 350px; display: block; }
-    </style>
-</head>
-<body>
-    <!-- Securely fetch Three.js inside an isolated sandbox window -->
-    <script src="https://cloudflare.com"></script>
-    <script>
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / 350, 1, 1000);
-        camera.position.z = 50;
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, 350);
-        document.body.appendChild(renderer.domElement);
-
-        const particleCount = 700;
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        const originalPositions = [];
-
-        for (let i = 0; i < particleCount; i++) {
-            const x = (Math.random() - 0.5) * 160;
-            const y = (Math.random() - 0.5) * 80;
-            const z = (Math.random() - 0.5) * 60;
-            positions[i * 3] = x;
-            positions[i * 3 + 1] = y;
-            positions[i * 3 + 2] = z;
-            originalPositions.push({x, y, z});
-        }
-
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const pMaterial = new THREE.PointsMaterial({
-            color: 0x00f3ff, size: 1.5, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending
-        });
-        const particleSystem = new THREE.Points(geometry, pMaterial);
-        scene.add(particleSystem);
-
-        let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - window.innerWidth / 2) * 0.15;
-            mouseY = (event.clientY - 350 / 2) * 0.15;
-        });
-
-        let clock = new THREE.Clock();
-        function animate() {
-            requestAnimationFrame(animate);
-            const time = clock.getElapsedTime() * 2;
-            const posArray = particleSystem.geometry.attributes.position.array;
-            for (let i = 0; i < particleCount; i++) {
-                const orig = originalPositions[i];
-                posArray[i * 3] = orig.x + Math.sin(time + orig.y) * 2;
-                posArray[i * 3 + 1] = orig.y + Math.cos(time + orig.x) * 2;
-            }
-            particleSystem.geometry.attributes.position.needsUpdate = true;
-            camera.position.x += (mouseX - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / 350;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, 350);
-        });
-    </script>
-</body>
-</html>
-"""
-
+st.set_page_config(page_title="SmartPrompt Compressor v3", layout="wide")
 
 # Premium Custom CSS Injection for Neumorphic Glass Cards
 st.markdown("""
@@ -103,6 +17,14 @@ st.markdown("""
         border: 1px solid rgba(0, 243, 255, 0.2);
         box-shadow: 0 8px 32px 0 rgba(0, 243, 255, 0.1);
         padding: 24px; border-radius: 16px; margin-bottom: 20px;
+    }
+    .telemetry-banner {
+        background: linear-gradient(90deg, rgba(0, 243, 255, 0.1) 0%, rgba(0, 114, 255, 0.1) 100%);
+        border: 1px dashed #00f3ff;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 25px;
     }
     .stMarkdown h3 { margin-top: 0px !important; padding-top: 0px !important; line-height: 1.2 !important; }
     div.stButton > button:first-child {
@@ -126,12 +48,17 @@ with open('model_compressor.pkl', 'rb') as f:
     model_compressor = pickle.load(f)
 
 # Header Architecture
-st.title("🌌 SmartPrompt-Compressor v3.0 (3D Automated Edition)")
+st.title("🌌 SmartPrompt-Compressor v3.0 (Automated Production Edition)")
 st.markdown("🚀 **Next-Gen Token Optimization Gateway powered by Unsupervised Space Compression**")
 st.markdown("---")
 
-# Render the Upgraded Live 3D Interactive Particle Canvas on Top
-components.html(three_js_html, height=360, scrolling=False)
+# NEW CLEAN TELEMETRY BANNER (Replaces the broken 3D block)
+st.markdown("""
+    <div class="telemetry-banner">
+        <span style="color: #00f3ff; font-weight: bold; letter-spacing: 1px;">📡 AUTOMATED API INFRASTRUCTURE ROUTING ENGINE ACTIVE</span>
+        <p style="margin: 5px 0 0 0; color: #9CA3AF; font-size: 13px;">PCA Dimensionality Reduction Layer & Supervised XGBoost Accuracy Regressor are loaded via unified binary pipelines.</p>
+    </div>
+""", unsafe_allow_html=True)
 
 # Two Column Control Layout
 col1, col2 = st.columns([1, 1.2], gap="large")
@@ -165,13 +92,15 @@ with col2:
         compressed_emb = pca_engine.transform(text_emb)
         raw_features = pd.DataFrame(compressed_emb, columns=[f'pca_dim_{i}' for i in range(5)])
         
+        # Safe Extraction
         retention_score = float(model_compressor.predict(raw_features)[0])
         
         optimized_tokens = max(3, int(original_tokens * (1 - (auto_compression_factor / 100))))
         saved_tokens = original_tokens - optimized_tokens
         financial_saved = saved_tokens * 0.0015
         
-        html_output = f"""
+        # Display the Futuristic Output Cards
+        st.markdown(f"""
             <div class="metric-3d-card">
                 <span style='color: #00f3ff; font-size: 13px; font-weight: bold; letter-spacing: 1px;'>SEMANTIC MEANING RETENTION RATE</span>
                 <h1 style='color: #00f3ff; margin: 5px 0 0 0; font-size: 42px;'>{retention_score * 100:.2f}% Accuracy</h1>
@@ -181,7 +110,6 @@ with col2:
                 <h1 style='color: #10B981; margin: 5px 0 0 0; font-size: 36px;'>Saved {saved_tokens} Tokens (${financial_saved:.4f} USD)</h1>
                 <p style='color: #9CA3AF; font-size: 12px; margin-top: 5px;'>Compressed prompt size from {original_tokens} down to {optimized_tokens} words successfully.</p>
             </div>
-        """
-        st.markdown(html_output, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
     else:
-        st.info("Enter your enterprise prompt text and click 'Initialize' to witness the 3D Token Optimization Pipeline in live action.")
+        st.info("Enter your enterprise prompt text and click 'Initialize' to witness the Token Optimization Pipeline in live action.")
